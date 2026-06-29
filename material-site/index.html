@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI問い合わせ自動返信オートメーション 資料配布</title>
+    <meta
+      name="description"
+      content="Googleフォーム、Google Workspace Studio、Gemini、Google Apps Scriptで作る問い合わせ自動返信オートメーションの資料配布ページです。"
+    >
+    <style>
+      :root {
+        --navy: #1f3f8e;
+        --red: #c81e2f;
+        --gray: #edeeef;
+        --text: #1a1a1a;
+        --sub: #595959;
+        --line: #d8dce3;
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--white);
+        color: var(--text);
+        font-family: Inter, "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+        line-height: 1.75;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid rgba(31, 63, 142, 0.14);
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(12px);
+      }
+
+      .topbar-inner,
+      .section-inner,
+      .hero-inner {
+        width: min(1120px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .topbar-inner {
+        display: flex;
+        min-height: 64px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--navy);
+        font-weight: 800;
+      }
+
+      .brand-mark {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        background: var(--red);
+        box-shadow: 8px 8px 0 var(--navy);
+      }
+
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 14px;
+        font-size: 13px;
+        color: var(--sub);
+      }
+
+      .nav a {
+        text-decoration: none;
+      }
+
+      .hero {
+        background: linear-gradient(180deg, #f8f9fb 0%, #ffffff 100%);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .hero-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
+        gap: 48px;
+        align-items: center;
+        padding: 72px 0 56px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--red);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: var(--navy);
+        line-height: 1.28;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(34px, 6vw, 64px);
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin: 0 0 18px;
+        font-size: clamp(25px, 3vw, 34px);
+      }
+
+      h3 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+
+      .lead {
+        margin: 22px 0 0;
+        color: var(--sub);
+        font-size: 17px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: 46px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--navy);
+        border-radius: 6px;
+        padding: 10px 16px;
+        color: var(--navy);
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .button.primary {
+        border-color: var(--red);
+        background: var(--red);
+        color: var(--white);
+      }
+
+      .cover-wrap {
+        border: 1px solid var(--line);
+        background: var(--white);
+        box-shadow: 0 18px 54px rgba(31, 63, 142, 0.14);
+      }
+
+      .cover-wrap img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      section {
+        padding: 64px 0;
+      }
+
+      .section-muted {
+        background: var(--gray);
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+        padding: 22px;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--sub);
+      }
+
+      .tag {
+        display: inline-block;
+        margin-bottom: 10px;
+        color: var(--red);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .viewer {
+        width: 100%;
+        height: min(76vh, 840px);
+        min-height: 560px;
+        border: 1px solid var(--line);
+        background: var(--white);
+      }
+
+      .video-frame {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: 1px solid var(--line);
+        background: #000000;
+      }
+
+      .video-frame iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      .link-list {
+        display: grid;
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .link-list a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+        padding: 15px 16px;
+        color: var(--navy);
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .link-list span {
+        color: var(--sub);
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      pre {
+        overflow: auto;
+        max-height: 620px;
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f7f8fa;
+        padding: 20px;
+        color: #222222;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 13px;
+        line-height: 1.65;
+        white-space: pre-wrap;
+      }
+
+      .prompt-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+
+      .note {
+        color: var(--sub);
+        font-size: 14px;
+      }
+
+      .footer {
+        padding: 36px 0;
+        background: var(--navy);
+        color: var(--white);
+      }
+
+      .footer p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.78);
+      }
+
+      @media (max-width: 880px) {
+        .topbar-inner {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 14px 0;
+        }
+
+        .nav {
+          justify-content: flex-start;
+        }
+
+        .hero-inner,
+        .grid.two,
+        .grid.three {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-inner {
+          padding-top: 48px;
+        }
+
+        .viewer {
+          min-height: 440px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>けいたろう 資料配布</span>
+        </div>
+        <nav class="nav" aria-label="ページ内ナビゲーション">
+          <a href="#materials">資料</a>
+          <a href="#video">動画</a>
+          <a href="#links">リンク</a>
+          <a href="#prompt">プロンプト</a>
+          <a href="#events">お知らせ</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <div>
+            <p class="eyebrow">Google Workspace Studio × Gemini × GAS</p>
+            <h1>AI問い合わせ自動返信オートメーション</h1>
+            <p class="lead">
+              Googleフォームの問い合わせを起点に、Geminiで返信案を作成し、人間の確認後にGASで送信する実務向けテンプレートです。
+              非エンジニアでも再現しやすいように、資料、コード、プロンプト、動画をまとめています。
+            </p>
+            <div class="actions">
+              <a class="button primary" href="assets/AI_Inquiry_Automation_Blueprint.pdf" download>スライドをダウンロード</a>
+              <a class="button" href="https://github.com/groundcobra009/miraichi-inquiry-auto-reply-gas" target="_blank" rel="noopener">GitHubを見る</a>
+              <a class="button" href="https://youtu.be/ADuaOgSNXAA" target="_blank" rel="noopener">動画を見る</a>
+            </div>
+          </div>
+          <div class="cover-wrap">
+            <img src="assets/slide-cover.png" alt="AI問い合わせ自動返信オートメーション資料の表紙">
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-inner">
+          <h2>この資料で扱うこと</h2>
+          <div class="grid three">
+            <article class="card">
+              <span class="tag">FLOW</span>
+              <h3>問い合わせ受付</h3>
+              <p>Googleフォームの回答をスプレッドシートへ集約し、フォーム回答シートを原本として扱います。</p>
+            </article>
+            <article class="card">
+              <span class="tag">AI</span>
+              <h3>返信案の生成</h3>
+              <p>Google Workspace Studio と Gemini で優先度、返信要否、件名、返信案をJSON化します。</p>
+            </article>
+            <article class="card">
+              <span class="tag">GAS</span>
+              <h3>承認後に送信</h3>
+              <p>返信用シートで人間がチェックした行だけ、Apps Scriptからメール送信します。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="materials" class="section-muted">
+        <div class="section-inner">
+          <div class="prompt-toolbar">
+            <div>
+              <h2>スライド資料</h2>
+              <p class="note">画面内で閲覧できます。手元に残す場合はPDFをダウンロードしてください。</p>
+            </div>
+            <a class="button primary" href="assets/AI_Inquiry_Automation_Blueprint.pdf" download>PDFをダウンロード</a>
+          </div>
+          <iframe class="viewer" src="assets/AI_Inquiry_Automation_Blueprint.pdf" title="AI問い合わせ自動返信オートメーション資料"></iframe>
+        </div>
+      </section>
+
+      <section id="video">
+        <div class="section-inner">
+          <div class="prompt-toolbar">
+            <div>
+              <h2>解説動画</h2>
+              <p class="note">動画で全体像を確認してから、GitHubとプロンプトをコピーすると進めやすいです。</p>
+            </div>
+            <a class="button" href="https://youtu.be/ADuaOgSNXAA" target="_blank" rel="noopener">YouTubeで開く</a>
+          </div>
+          <div class="video-frame">
+            <iframe
+              src="https://www.youtube.com/embed/ADuaOgSNXAA"
+              title="AI問い合わせ自動返信オートメーション解説動画"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section id="links" class="section-muted">
+        <div class="section-inner">
+          <h2>コピー用リンク</h2>
+          <ul class="link-list">
+            <li>
+              <a href="https://github.com/groundcobra009/miraichi-inquiry-auto-reply-gas" target="_blank" rel="noopener">
+                GitHub リポジトリ
+                <span>GASコード、README、プロンプト</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScYkIZh-KW_XvkxfmmPanxhVROMzpPsfd73vyxj5F1_88eVBA/viewform" target="_blank" rel="noopener">
+                サンプル問い合わせフォーム
+                <span>フォーム入力の動作確認用</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://docs.google.com/spreadsheets/d/1ywHXrpAhzkCo3HysrMdoNb2KHT_1AmT7lYDwel3WYKI/edit?usp=sharing" target="_blank" rel="noopener">
+                配布用スプレッドシート
+                <span>シート構成の確認・コピー用</span>
+              </a>
+            </li>
+            <li>
+              <a href="assets/workspace-studio-prompt.md" target="_blank" rel="noopener">
+                Workspace Studio プロンプト
+                <span>Geminiステップへ貼り付け</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="prompt">
+        <div class="section-inner">
+          <div class="prompt-toolbar">
+            <div>
+              <h2>今回使ったプロンプト</h2>
+              <p class="note">Google Workspace Studio の Gemini ステップに貼り付ける内容です。</p>
+            </div>
+            <button class="button" type="button" id="copyPrompt">コピー</button>
+          </div>
+          <pre id="promptBlock">読み込み中...</pre>
+        </div>
+      </section>
+
+      <section id="events" class="section-muted">
+        <div class="section-inner">
+          <h2>お知らせ・今後のイベント</h2>
+          <div class="grid two">
+            <article class="card">
+              <span class="tag">EVENT</span>
+              <h3>今後のPeatixイベント</h3>
+              <p>
+                生成AI、GAS、Google Workspace自動化、業務改善に関するイベント情報はPeatixで更新します。
+              </p>
+              <div class="actions">
+                <a class="button" href="https://tanagokoroai.peatix.com/" target="_blank" rel="noopener">Peatixを見る</a>
+              </div>
+            </article>
+            <article class="card">
+              <span class="tag">MESSAGE</span>
+              <h3>AIを、現場で使える形に。</h3>
+              <p>
+                難しいAIを、実務レベルまで落とし込む。派手ではなく、強い。現場で再現できるAI活用をテーマに発信しています。
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="section-inner">
+        <p>© Keitaro. This page distributes the AI inquiry automation materials, source links, prompt, and video.</p>
+      </div>
+    </footer>
+
+    <script>
+      const promptBlock = document.getElementById("promptBlock");
+      const copyButton = document.getElementById("copyPrompt");
+
+      fetch("assets/workspace-studio-prompt.md")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Prompt file could not be loaded.");
+          }
+          return response.text();
+        })
+        .then((text) => {
+          promptBlock.textContent = text;
+        })
+        .catch(() => {
+          promptBlock.textContent = "プロンプトを読み込めませんでした。assets/workspace-studio-prompt.md を直接開いてください。";
+        });
+
+      copyButton.addEventListener("click", async () => {
+        const text = promptBlock.textContent;
+        await navigator.clipboard.writeText(text);
+        copyButton.textContent = "コピーしました";
+        window.setTimeout(() => {
+          copyButton.textContent = "コピー";
+        }, 1600);
+      });
+    </script>
+  </body>
+</html>

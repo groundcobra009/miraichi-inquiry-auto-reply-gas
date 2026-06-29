@@ -10,6 +10,15 @@ Googleフォームの問い合わせを起点に、Google Workspace Studio / Gem
 - 利用したい方は、**公開から1週間以内にフォークしてください。**
 - **1週間以内にフォークください。**
 
+## 資料配布ページ
+
+スライドPDF、解説動画、Google Workspace Studioプロンプト、サンプルリンクを1ページにまとめています。
+
+- 配布ページ: [https://material-site-sage.vercel.app](https://material-site-sage.vercel.app)
+- 解説動画: [https://youtu.be/ADuaOgSNXAA](https://youtu.be/ADuaOgSNXAA)
+- スライドPDF: 配布ページ内で閲覧・ダウンロードできます。
+- プロンプト: 配布ページ内のコードブロック、または `workspace-studio-prompt.md` をコピーしてください。
+
 ## できること
 
 - スプレッドシートにカスタムメニュー `問い合わせ自動返信` を追加
