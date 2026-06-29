@@ -18,6 +18,7 @@ Googleフォームの問い合わせを起点に、Google Workspace Studio / Gem
 - 解説動画: [https://youtu.be/ADuaOgSNXAA](https://youtu.be/ADuaOgSNXAA)
 - スライドPDF: 配布ページ内で閲覧・ダウンロードできます。
 - プロンプト: 配布ページ内のコードブロック、または `workspace-studio-prompt.md` をコピーしてください。
+- 特典配布テンプレート: イベントカバー、講師プロフィール、X、note、公式LINE枠、書籍リンクを含めています。
 
 ## できること
 

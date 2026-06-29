@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AI問い合わせ自動返信オートメーション 資料配布</title>
+    <title>問い合わせ自動返信システム構築セミナー 特典配布</title>
     <meta
       name="description"
       content="Googleフォーム、Google Workspace Studio、Gemini、Google Apps Scriptで作る問い合わせ自動返信オートメーションの資料配布ページです。"
@@ -149,6 +149,10 @@
         margin-top: 30px;
       }
 
+      .actions.compact {
+        margin-top: 18px;
+      }
+
       .button {
         display: inline-flex;
         min-height: 46px;
@@ -178,6 +182,76 @@
         display: block;
         width: 100%;
         height: auto;
+      }
+
+      .profile-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+        gap: 18px;
+      }
+
+      .profile-card,
+      .book-card {
+        display: grid;
+        gap: 18px;
+        align-items: start;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+        padding: 22px;
+      }
+
+      .profile-card {
+        grid-template-columns: 132px minmax(0, 1fr);
+      }
+
+      .book-card {
+        grid-template-columns: 150px minmax(0, 1fr);
+      }
+
+      .profile-card p,
+      .book-card p {
+        margin: 0;
+        color: var(--sub);
+      }
+
+      .avatar {
+        width: 132px;
+        aspect-ratio: 1;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .book-card img {
+        width: 150px;
+        max-width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+      }
+
+      .social-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .mini-link {
+        display: inline-flex;
+        min-height: 38px;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 7px 12px;
+        color: var(--navy);
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .mini-link.disabled {
+        color: var(--sub);
       }
 
       section {
@@ -327,7 +401,8 @@
 
         .hero-inner,
         .grid.two,
-        .grid.three {
+        .grid.three,
+        .profile-grid {
           grid-template-columns: 1fr;
         }
 
@@ -338,6 +413,19 @@
         .viewer {
           min-height: 440px;
         }
+
+        .profile-card,
+        .book-card {
+          grid-template-columns: 1fr;
+        }
+
+        .avatar {
+          width: 118px;
+        }
+
+        .book-card img {
+          width: 132px;
+        }
       }
     </style>
   </head>
@@ -346,12 +434,13 @@
       <div class="topbar-inner">
         <div class="brand">
           <span class="brand-mark" aria-hidden="true"></span>
-          <span>けいたろう 資料配布</span>
+          <span>けいたろう 特典配布</span>
         </div>
         <nav class="nav" aria-label="ページ内ナビゲーション">
           <a href="#materials">資料</a>
           <a href="#video">動画</a>
           <a href="#links">リンク</a>
+          <a href="#profile">講師</a>
           <a href="#prompt">プロンプト</a>
           <a href="#events">お知らせ</a>
         </nav>
@@ -362,9 +451,10 @@
       <section class="hero">
         <div class="hero-inner">
           <div>
-            <p class="eyebrow">Google Workspace Studio × Gemini × GAS</p>
-            <h1>AI問い合わせ自動返信オートメーション</h1>
+            <p class="eyebrow">イベント特典配布 / 2026年6月29日開催</p>
+            <h1>問い合わせ自動返信システム構築セミナー</h1>
             <p class="lead">
+              Codex、Google Workspace Studio、GASで作る問い合わせ自動返信システム構築セミナーの特典配布ページです。
               Googleフォームの問い合わせを起点に、Geminiで返信案を作成し、人間の確認後にGASで送信する実務向けテンプレートです。
               非エンジニアでも再現しやすいように、資料、コード、プロンプト、動画をまとめています。
             </p>
@@ -378,7 +468,7 @@
             </div>
           </div>
           <div class="cover-wrap">
-            <img src="assets/slide-cover.png" alt="AI問い合わせ自動返信オートメーション資料の表紙">
+            <img src="assets/event-cover.png" alt="問い合わせ自動返信システム構築セミナーのイベントカバー">
           </div>
         </div>
       </section>
@@ -468,6 +558,42 @@
               </a>
             </li>
           </ul>
+        </div>
+      </section>
+
+      <section id="profile">
+        <div class="section-inner">
+          <h2>講師・関連リンク</h2>
+          <div class="profile-grid">
+            <article class="profile-card">
+              <img class="avatar" src="assets/keitaro-id.jpg" alt="けいたろう氏のプロフィール画像">
+              <div>
+                <span class="tag">INSTRUCTOR</span>
+                <h3>けいたろう</h3>
+                <p>
+                  AI、GAS、Google Workspace、Notionを活用した業務自動化をテーマに、非エンジニアでも現場で使える仕組みづくりを発信しています。
+                </p>
+                <div class="social-row">
+                  <a class="mini-link" href="https://x.com/keitaro_aigc" target="_blank" rel="noopener">X @keitaro_aigc</a>
+                  <a class="mini-link" href="https://note.com/keitaro_aigc" target="_blank" rel="noopener">note</a>
+                  <a class="mini-link disabled" href="#profile" aria-label="公式LINE URLは差し替え前提です">公式LINE</a>
+                </div>
+              </div>
+            </article>
+            <article class="book-card">
+              <img src="assets/book.jpg" alt="AIで作るプレゼン資料入門ガイド 書影">
+              <div>
+                <span class="tag">BOOK</span>
+                <h3>AIで作るプレゼン資料入門ガイド</h3>
+                <p>
+                  ChatGPT、Claude、Gemini、Copilotを活用した資料作成の実践書です。今回のような業務自動化資料を整える考え方にも応用できます。
+                </p>
+                <div class="actions compact">
+                  <a class="button" href="https://www.amazon.co.jp/dp/4815640467" target="_blank" rel="noopener">Amazonで見る</a>
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
