@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        color: #202124;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .section {
+        border-top: 1px solid #dadce0;
+        padding: 16px 0;
+      }
+
+      .row {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .muted {
+        color: #5f6368;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .switch {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .switch input {
+        height: 18px;
+        width: 18px;
+      }
+
+      button {
+        width: 100%;
+        border: 0;
+        border-radius: 4px;
+        background: #1a73e8;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 10px 12px;
+      }
+
+      button:disabled {
+        background: #c7c9cc;
+        cursor: wait;
+      }
+
+      pre {
+        background: #f8fafd;
+        border: 1px solid #dadce0;
+        border-radius: 4px;
+        min-height: 64px;
+        overflow: auto;
+        padding: 10px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>送信設定</h1>
+
+    <div class="section">
+      <div class="row">
+        <div>
+          <strong>15分ごとに自動送信</strong>
+          <div class="muted">J列がTRUE、K列が未送信の行だけ送信します。</div>
+        </div>
+        <label class="switch">
+          <input id="triggerToggle" type="checkbox" onchange="toggleTrigger()">
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <button id="sendButton" onclick="sendNow()">すぐに送信</button>
+      <p class="muted">送信成功後、K列「返信」をTRUEにします。</p>
+    </div>
+
+    <div class="section">
+      <strong>結果</strong>
+      <pre id="result">読み込み中...</pre>
+    </div>
+
+    <script>
+      const triggerToggle = document.getElementById('triggerToggle');
+      const sendButton = document.getElementById('sendButton');
+      const result = document.getElementById('result');
+
+      function setBusy(isBusy) {
+        triggerToggle.disabled = isBusy;
+        sendButton.disabled = isBusy;
+      }
+
+      function renderResult(value) {
+        if (!value) {
+          result.textContent = '';
+          return;
+        }
+
+        if (typeof value === 'string') {
+          result.textContent = value;
+          return;
+        }
+
+        const lines = [
+          '確認行数: ' + value.scanned,
+          '送信済み: ' + value.sent,
+          'スキップ: ' + value.skipped,
+          '失敗: ' + value.failed,
+        ];
+        if (value.messages && value.messages.length) {
+          lines.push('', '詳細:', value.messages.join('\n'));
+        }
+        result.textContent = lines.join('\n');
+      }
+
+      function loadState() {
+        setBusy(true);
+        google.script.run
+          .withSuccessHandler(function(state) {
+            triggerToggle.checked = Boolean(state.triggerEnabled);
+            result.textContent = state.triggerEnabled
+              ? '自動送信トリガーはONです。'
+              : '自動送信トリガーはOFFです。';
+            setBusy(false);
+          })
+          .withFailureHandler(function(error) {
+            result.textContent = error.message;
+            setBusy(false);
+          })
+          .getSendSidebarState();
+      }
+
+      function toggleTrigger() {
+        setBusy(true);
+        google.script.run
+          .withSuccessHandler(function(state) {
+            triggerToggle.checked = Boolean(state.triggerEnabled);
+            result.textContent = state.triggerEnabled
+              ? '自動送信トリガーをONにしました。'
+              : '自動送信トリガーをOFFにしました。';
+            setBusy(false);
+          })
+          .withFailureHandler(function(error) {
+            triggerToggle.checked = !triggerToggle.checked;
+            result.textContent = error.message;
+            setBusy(false);
+          })
+          .setAutoSendTriggerEnabled(triggerToggle.checked);
+      }
+
+      function sendNow() {
+        setBusy(true);
+        result.textContent = '送信中...';
+        google.script.run
+          .withSuccessHandler(function(summary) {
+            renderResult(summary);
+            setBusy(false);
+          })
+          .withFailureHandler(function(error) {
+            result.textContent = error.message;
+            setBusy(false);
+          })
+          .sendApprovedRepliesFromSidebar();
+      }
+
+      loadState();
+    </script>
+  </body>
+</html>

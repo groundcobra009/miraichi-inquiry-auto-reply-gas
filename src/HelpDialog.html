@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        margin: 0;
+        color: #202124;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      header {
+        background: #1f5f46;
+        color: #fff;
+        padding: 20px 24px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      main {
+        padding: 20px 24px 28px;
+      }
+
+      h2 {
+        border-bottom: 1px solid #dadce0;
+        font-size: 16px;
+        margin: 22px 0 10px;
+        padding-bottom: 6px;
+      }
+
+      ol,
+      ul {
+        padding-left: 22px;
+      }
+
+      code {
+        background: #f1f3f4;
+        border-radius: 3px;
+        padding: 2px 5px;
+      }
+
+      .note {
+        background: #f8fafd;
+        border: 1px solid #d7e3fc;
+        border-radius: 6px;
+        margin-top: 12px;
+        padding: 12px;
+      }
+
+      .warning {
+        background: #fff8e1;
+        border: 1px solid #fdd663;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>問い合わせ自動返信 ヘルプ</h1>
+      <div>Googleフォーム、Workspace Studio、人間チェック、GAS送信を組み合わせる問い合わせ返信ワークフローです。</div>
+    </header>
+
+    <main>
+      <h2>全体の流れ</h2>
+      <ol>
+        <li><code>初期設定</code> でGoogleフォーム、設定シート、返信用シートを準備します。</li>
+        <li>Googleフォームに回答が届くと、標準の <code>フォームの回答 1</code> に保存されます。</li>
+        <li>Google Workspace Studio が回答内容を判定し、<code>返信用</code> シートへ1行追加します。</li>
+        <li>人間がI列の返信案を確認し、問題なければJ列 <code>チェック</code> をTRUEにします。</li>
+        <li>GASがJ列TRUE、K列未送信、G列 <code>要返信</code> の行だけメール送信します。</li>
+        <li>送信成功後、K列 <code>返信</code> がTRUEになり、L列に送信日時が入ります。</li>
+      </ol>
+
+      <h2>返信用シートの列</h2>
+      <ul>
+        <li>A〜E列: フォーム回答から引き継ぐ基本情報</li>
+        <li>F〜I列: Geminiが生成する優先度、返信要否、件名、返信案</li>
+        <li>J列: 人間が確認後にTRUEにするチェック列</li>
+        <li>K列: GASが送信成功後にTRUEにする返信済み列</li>
+        <li>L列: 最終更新日時</li>
+      </ul>
+
+      <h2>送信設定</h2>
+      <ul>
+        <li><code>送信設定を開く</code> からサイドバーを開きます。</li>
+        <li><code>すぐに送信</code> は、その時点の承認済み行を即時送信します。</li>
+        <li>15分ごとの自動送信をONにすると、時間主導トリガーが作成されます。</li>
+      </ul>
+
+      <div class="note warning">
+        メール送信は実行ユーザーのGoogleアカウントから行われます。初回実行時はメール送信権限の承認が必要です。
+      </div>
+
+      <h2>送信されないとき</h2>
+      <ul>
+        <li>J列 <code>チェック</code> がTRUEになっているか確認してください。</li>
+        <li>K列 <code>返信</code> が既にTRUEの行は二重送信防止のため送信されません。</li>
+        <li>G列が <code>要返信</code> 以外の行は送信されません。</li>
+        <li>B列、H列、I列が空欄の行は送信されません。</li>
+        <li><code>送信ログ</code> シートに成功/失敗の理由が記録されます。</li>
+      </ul>
+    </main>
+  </body>
+</html>
